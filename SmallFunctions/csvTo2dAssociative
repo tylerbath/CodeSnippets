@@ -1,0 +1,26 @@
+<?php
+/**
+ * Takes a csv string and returns a 2D associative array. 
+ * @param  string[] $columns 
+ * @param  string $csv     		
+ * @return string[][]
+ */
+function csvTo2dAssociativeArray($columns, $csv, $delimeter=','){
+	$colCount = count($colOrder);
+	// Create array of lines
+	$lines = explode(PHP_EOL,$csvStr);
+	// Iterate over each line
+	foreach ($csv as $key => $line) {
+		// Convert string to array.
+		$line = str_getcsv($line, $delimeter);
+		$lineCount = count($line);
+		// If the line has fewer columns then we have column headings for,
+		// then trim, to prevent errors. 
+		$size = ($colCount > $lineCount) ? $lineCount : $colCount;
+		$tempCols = array_slice($mapping, 0, $size);
+		// Create associative array of the line
+		$line = array_combine($tempCols, $line);
+		$csv [$key] = $line;
+	}
+	return $csv;
+}
