@@ -4,20 +4,16 @@ function getTailOutputLog($file)
 	if(!isset($_SESSION)){
 		session_start();
 	}
-
-	$run = Run::findOrFail($id);
-	$host = $run->image->getHost();
-
-	if (\Session::has("fileOffset_run-$id")) {
-		$offset = \Session::get("fileOffset_run-$id");
+	$sessionKey = "fileOffset_$file";
+	if (\Session::has($sessionKey)) {
+		$offset = \Session::get($sessionKey);
 	}
 	else {
 		$offset = 0;
 	}
-
 	$tuple = phpReadTail($file, $offset);
 	
-	\Session::put("fileOffset_run-$id", $tuple['offset']);
+	\Session::put($sessionKey, $tuple['offset']);
 	return nl2br($tuple['data']);
 	exit();
 }
